@@ -1,4 +1,3 @@
-import java.awt.*;
 import styy.Window;
 
 public class Main {

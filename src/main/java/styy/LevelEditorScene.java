@@ -7,8 +7,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 public class LevelEditorScene extends Scene{
 
@@ -141,10 +140,27 @@ public class LevelEditorScene extends Scene{
         glEnableVertexAttribArray(0);
 
         glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize*floatSizeBytes);
-
+        glEnableVertexAttribArray(1);
     }
     @Override
     public void update(float dt) {
+        //Bind shader program
+        glUseProgram(shaderProgram);
+        //Bind VAO that we are using
+        glBindVertexArray(vaoID);
+
+        //enable the vertex attribute pointers
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+
+        glDrawElements(GL_TRIANGLES, elementArray.length, GL_UNSIGNED_INT, 0);
+
+        //unbinding everything
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+
+        glBindVertexArray(0);
+        glUseProgram(0);
 
     }
 }

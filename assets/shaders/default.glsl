@@ -1,9 +1,7 @@
 #type vertex
 #version 330 core
-#extension GL_ARB_explicit_attribute_location : require
-#extension GL_ARB_explicit_uniform_location : require
 layout (location=0) in vec3 aPos;
-layout (loaction=1) in vec4 aColor;
+layout (location=1) in vec4 aColor;
 
 out vec4 fColor;
 

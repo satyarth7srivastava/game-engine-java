@@ -1,6 +1,7 @@
 package styy;
 
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import renderer.Shader;
 
@@ -17,10 +18,10 @@ public class LevelEditorScene extends Scene{
     private float[] vertexArray = {
             //position             //color
             //(x,y,z)              //(r,g,b,a)
-             0.5f, -0.5f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, //Bottom Right
-            -0.5f, 0.5f,  0.0f,      0.0f, 1.0f, 0.0f, 1.0f, //Top Left
-             0.5f, 0.5f,  0.0f,      0.0f, 0.0f, 1.0f, 1.0f, //Top Right
-            -0.5f, -0.5f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f, //Bottom Left
+             10.0f, -100.0f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, //Bottom Right
+            -100.0f, 100.0f,  0.0f,      0.0f, 1.0f, 0.0f, 1.0f, //Top Left
+             10.0f, 100.0f,  0.0f,      1.0f, 0.0f, 1.0f, 1.0f, //Top Right
+            -100.0f, -100.0f, 0.0f,      1.0f, 1.0f, 0.0f, 1.0f, //Bottom Left
     };
 
     //IMPORTANT: Must be in counter-clockwise order
@@ -31,7 +32,7 @@ public class LevelEditorScene extends Scene{
 
                     x       x
              */
-            2, 1, 0, //upper right triangle
+            0, 2, 1, //upper right triangle
             0, 1, 3, //bottom left triangle
     };
 
@@ -44,6 +45,7 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void init(){
+        this.camera = new Camera(new Vector2f());
         defaultShader = new Shader("assets/shaders/default.glsl");
         defaultShader.compile();
         // =========================================
@@ -83,8 +85,12 @@ public class LevelEditorScene extends Scene{
     }
     @Override
     public void update(float dt) {
-        //Bind shader program
+        camera.position.x -= dt * 50.0f;
+
+        //Using and uploading shaders
         defaultShader.use();
+        defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+        defaultShader.uploadMat4f("uView", camera.getViewMatrix());
         //Bind VAO that we are using
         glBindVertexArray(vaoID);
 

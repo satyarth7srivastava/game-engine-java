@@ -1,6 +1,8 @@
 package styy;
 
 
+import Components.FontRenderer;
+import Components.SpriteRenderer;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import renderer.Shader;
@@ -41,12 +43,21 @@ public class LevelEditorScene extends Scene{
     private Shader defaultShader;
     private Texture testTexture;
 
+    private GameObject testObj;
+    private boolean firstTime = false;
+
     public LevelEditorScene(){
 
     }
 
     @Override
     public void init(){
+        System.out.println("Creating test obj");
+        this.testObj = new GameObject("Test Obj");
+        this.testObj.addComponent(new SpriteRenderer());
+        this.testObj.addComponent(new FontRenderer());
+        this.addGameObjectToScene(this.testObj);
+
         this.camera = new Camera(new Vector2f());
 
         defaultShader = new Shader("assets/shaders/default.glsl");
@@ -130,6 +141,18 @@ public class LevelEditorScene extends Scene{
         glBindVertexArray(0);
 
         defaultShader.detach();
+
+        if(!firstTime) {
+            System.out.println("Creating game obj 2");
+            GameObject go = new GameObject("Game test 2");
+            go.addComponent(new SpriteRenderer());
+            this.addGameObjectToScene(go);
+            firstTime = true;
+        }
+
+        for(GameObject go : this.gameObjects){
+            go.update(dt);
+        }
 
     }
 }

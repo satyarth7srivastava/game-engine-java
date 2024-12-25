@@ -102,6 +102,10 @@ public class RenderBatch {
         shader.detach();
     }
 
+    public boolean hasRoom(){
+        return hasRoom;
+    }
+
     private void loadVertexProperties(int ind){
         SpriteRenderer spr = this.sprites[ind];
 
@@ -124,7 +128,7 @@ public class RenderBatch {
 
             //loading position
             vertices[offset] = spr.gameObject.transform.position.x + (xAdd * spr.gameObject.transform.scale.x);
-            vertices[offset + 1] = spr.gameObject.transform.position.y + (xAdd * spr.gameObject.transform.scale.y);
+            vertices[offset + 1] = spr.gameObject.transform.position.y + (yAdd * spr.gameObject.transform.scale.y);
 
             //loading colors
             vertices[offset + 2] = color.x;

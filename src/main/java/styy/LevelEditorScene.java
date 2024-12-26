@@ -3,6 +3,7 @@ package styy;
 import Components.SpriteRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import util.AssetPool;
 
 public class LevelEditorScene extends Scene{
 
@@ -15,10 +16,10 @@ public class LevelEditorScene extends Scene{
         this.camera = new Camera(new Vector2f());
 
         int xOffset = 100; // padding kind of thing
-        int yOffset = 10;
+        int yOffset = 100;
 
-        float totalWidth = (float) (600 - (xOffset*2));
-        float totalHeight = (float) (300 - (yOffset*2));
+        float totalWidth = (float) (720 - (xOffset*2));
+        float totalHeight = (float) (720 - (yOffset*2));
         float sizeX = totalHeight / 100.0f;
         float sizeY = totalWidth / 100.0f;
 
@@ -32,10 +33,17 @@ public class LevelEditorScene extends Scene{
                 this.addGameObjectToScene(go);
             }
         }
+
+        loadResources();
     }
+
+    private void loadResources(){
+        AssetPool.getShader("assets/shaders/default.glsl");
+    }
+
     @Override
     public void update(float dt) {
-        System.out.println("FPS: " + ((float) 1/dt));
+//        System.out.println("FPS: " + ((float) 1/dt));
 
         for(GameObject go : this.gameObjects){
             go.update(dt);

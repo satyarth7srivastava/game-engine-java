@@ -174,4 +174,10 @@ public class Shader {
         glUniform1i(varLoc, slot);
     }
 
+    public void uploadIntArray(String varName, int[] array){
+        int varLoc = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1iv(varLoc, array);
+    }
+
 }

@@ -12,30 +12,17 @@ public class LevelEditorScene extends Scene{
     }
 
     @Override
-    public void init(){
+    public void init() {
         this.camera = new Camera(new Vector2f());
+        GameObject obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256,256)));
+        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage_Mario.png")));
+        this.addGameObjectToScene(obj1);
 
-        int xOffset = 100; // padding kind of thing
-        int yOffset = 100;
-
-        float totalWidth = (float) (720 - (xOffset*2));
-        float totalHeight = (float) (720 - (yOffset*2));
-        float sizeX = totalHeight / 100.0f;
-        float sizeY = totalWidth / 100.0f;
-
-        for(int x = 0; x < 100; x++){
-            for(int y = 0; y < 100; y++){
-                float xPos = xOffset + (x * sizeX);
-                float yPos = yOffset + (y * sizeY);
-                String goName = "Obj" + x + " " + y;
-                GameObject go = new GameObject(goName, new Transform(new Vector2f(xPos, yPos), new Vector2f(sizeX, sizeY)));
-                go.addComponent(new SpriteRenderer(new Vector4f(xPos/totalWidth, yPos/totalHeight, 1, 1)));
-                this.addGameObjectToScene(go);
-            }
-        }
-
-        loadResources();
+        GameObject obj2 = new GameObject("Ob2", new Transform(new Vector2f(400, 100), new Vector2f(256,256)));
+        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage_Heart.jpg")));
+        this.addGameObjectToScene(obj2);
     }
+
 
     private void loadResources(){
         AssetPool.getShader("assets/shaders/default.glsl");

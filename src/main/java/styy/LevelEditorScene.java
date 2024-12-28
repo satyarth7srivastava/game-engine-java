@@ -1,6 +1,8 @@
 package styy;
 
+import Components.Sprite;
 import Components.SpriteRenderer;
+import Components.SpriteSheet;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import util.AssetPool;
@@ -13,19 +15,27 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void init() {
+        loadResources();
+
         this.camera = new Camera(new Vector2f());
+
+        SpriteSheet sprites = AssetPool.getSpriteSheet("assets/images/spritesheet.png");
         GameObject obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256,256)));
-        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage_Mario.png")));
+        obj1.addComponent(new SpriteRenderer(sprites.getSprite(11)));
         this.addGameObjectToScene(obj1);
 
         GameObject obj2 = new GameObject("Ob2", new Transform(new Vector2f(400, 100), new Vector2f(256,256)));
-        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/images/testImage_Heart.jpg")));
+        obj2.addComponent(new SpriteRenderer(sprites.getSprite(15)));
         this.addGameObjectToScene(obj2);
     }
 
 
     private void loadResources(){
         AssetPool.getShader("assets/shaders/default.glsl");
+        AssetPool.addSpriteSheet("assets/images/spritesheet.png",
+                new SpriteSheet(AssetPool.getTexture("assets/images/spritesheet.png"),
+                        16, 16, 26, 0
+                ));
     }
 
     @Override

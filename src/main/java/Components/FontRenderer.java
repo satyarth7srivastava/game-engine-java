@@ -1,6 +1,6 @@
 package Components;
 
-import styy.Component;
+import Nova.Component;
 
 public class FontRenderer extends Component {
 

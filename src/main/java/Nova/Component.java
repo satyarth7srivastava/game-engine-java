@@ -1,4 +1,4 @@
-package styy;
+package Nova;
 
 public abstract class Component {
 

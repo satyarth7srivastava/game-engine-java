@@ -3,7 +3,7 @@ package renderer;
 import Components.SpriteRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import styy.Window;
+import Nova.Window;
 import util.AssetPool;
 
 import java.util.ArrayList;
@@ -104,10 +104,20 @@ public class RenderBatch {
     }
 
     public void render(){
-        //For now, we will re-buffer all data every frame
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        boolean reBufferData = false;
+        for(int i = 0; i < numSprites; i++){
+            SpriteRenderer spr = sprites[i];
+            if(spr.isDirty()){
+                loadVertexProperties(i);
+                spr.setClean();
+                reBufferData = true;
+            }
+        }
 
+        if(reBufferData) {
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        }
         //use shader
         shader.use();
         shader.uploadMat4f("uProjection", Window.getScene().getCamera().getProjectionMatrix());

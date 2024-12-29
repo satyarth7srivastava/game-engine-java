@@ -1,7 +1,7 @@
 package renderer;
 
 import Components.SpriteRenderer;
-import styy.GameObject;
+import Nova.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;

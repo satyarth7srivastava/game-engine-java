@@ -1,4 +1,4 @@
-package styy;
+package Nova;
 
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;

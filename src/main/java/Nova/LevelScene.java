@@ -1,4 +1,4 @@
-package styy;
+package Nova;
 
 public class LevelScene extends Scene{
     public LevelScene(){

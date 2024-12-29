@@ -1,6 +1,7 @@
 package renderer;
 
 import Components.SpriteRenderer;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import Nova.Window;
@@ -14,7 +15,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch>{
     //Vertex
     //Pos(x,y)      Color(r,g,b,a)          tex coords      tex_id
     //f, f,          f, f, f, f,              f,f,             f
@@ -40,13 +41,15 @@ public class RenderBatch {
     private int vaoID, vboID;
     private int maxBatchSize;
     private Shader shader;
+    private int zIndex;
 
-    public RenderBatch(int maxBatchSize){
+    public RenderBatch(int maxBatchSize, int zIndex){
         this.shader = AssetPool.getShader("assets/shaders/default.glsl");
         this.shader.compile();
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
         this.textures = new ArrayList<>();
+        this.zIndex = zIndex;
 
         this.vertices = new float[maxBatchSize * VERTEX_SIZE * 4]; // 4 vertex per quad
 
@@ -114,7 +117,7 @@ public class RenderBatch {
             }
         }
 
-        if(reBufferData) {
+        if(true) { // look at here only the batch updating is getting rendered here do some de bugging
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
         }
@@ -226,5 +229,14 @@ public class RenderBatch {
 
     public boolean hasTexture(Texture tx){
         return this.textures.contains(tx);
+    }
+
+    public int getzIndex(){
+        return zIndex;
+    }
+
+    @Override
+    public int compareTo(@NotNull RenderBatch o) {
+        return Integer.compare(this.zIndex, o.zIndex);
     }
 }

@@ -4,6 +4,7 @@ import Components.SpriteRenderer;
 import Nova.GameObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Renderer {
@@ -24,7 +25,7 @@ public class Renderer {
     public void add(SpriteRenderer spr){
         boolean added = false;
         for(RenderBatch batch : batches){
-            if(batch.hasRoom()){
+            if(batch.hasRoom() && batch.getzIndex() == spr.gameObject.getzIndex()){
                 Texture tex = spr.getTexture();
                 if(tex == null || batch.hasTexture(tex) || batch.hasTextureRoom()) {
                     batch.addSprite(spr);
@@ -35,15 +36,20 @@ public class Renderer {
         }
 
         if(!added){
-            RenderBatch rb = new RenderBatch(MAX_BATCH_SIZE);
+            System.out.println("Adding " + batches.size() + " to the renderer list");
+            RenderBatch rb = new RenderBatch(MAX_BATCH_SIZE, spr.gameObject.getzIndex());
             rb.start();
             batches.add(rb);
             rb.addSprite(spr);
+            Collections.sort(batches);
         }
     }
 
     public void render(){
+        int x = 1;
         for(RenderBatch batch : batches){
+            System.out.println("We are rendering: " + x);
+            x++;
             batch.render();
         }
     }

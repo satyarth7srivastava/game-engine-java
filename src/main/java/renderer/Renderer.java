@@ -36,7 +36,6 @@ public class Renderer {
         }
 
         if(!added){
-            System.out.println("Adding " + batches.size() + " to the renderer list");
             RenderBatch rb = new RenderBatch(MAX_BATCH_SIZE, spr.gameObject.getzIndex());
             rb.start();
             batches.add(rb);

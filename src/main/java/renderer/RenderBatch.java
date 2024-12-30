@@ -117,7 +117,7 @@ public class RenderBatch implements Comparable<RenderBatch>{
             }
         }
 
-        if(true) { // look at here only the batch updating is getting rendered here do some de bugging
+        if(reBufferData) { // look at here only the batch updating is getting rendered here do some de bugging
             glBindBuffer(GL_ARRAY_BUFFER, vboID);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
         }

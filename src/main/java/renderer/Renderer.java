@@ -47,7 +47,6 @@ public class Renderer {
     public void render(){
         int x = 1;
         for(RenderBatch batch : batches){
-            System.out.println("We are rendering: " + x);
             x++;
             batch.render();
         }

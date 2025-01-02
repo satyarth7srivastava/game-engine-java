@@ -15,6 +15,7 @@ public class Window {
     private int width, height;
     private String title;
     private long glfwWindow;
+    private ImGuiLayer imGuiLayer;
 
     //for testing only
     public float r, g, b, a;
@@ -104,6 +105,12 @@ public class Window {
         //setting up callbacks for keys
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
+        //setting up callback for window reSizing
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
+
         //Making the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
         //Enabling V-sync
@@ -121,6 +128,9 @@ public class Window {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        this.imGuiLayer = new ImGuiLayer(glfwWindow);
+        this.imGuiLayer.initImGui();
 
         Window.changeScene(0);
     }
@@ -142,6 +152,8 @@ public class Window {
                 currentScene.update(dt);
             }
 
+            this.imGuiLayer.update(dt);
+
             //testing
 //            if(fade){
 //                r = Math.max(r - 0.01f, (float) 0.5);
@@ -159,5 +171,18 @@ public class Window {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+    }
+
+    public static int getWidth(){
+        return get().width;
+    }
+    public static int getHeight(){
+        return get().height;
+    }
+    public static void setWidth(int newWidth){
+        get().width = newWidth;
+    }
+    public static void setHeight(int newHeight){
+        get().height = newHeight;
     }
 }

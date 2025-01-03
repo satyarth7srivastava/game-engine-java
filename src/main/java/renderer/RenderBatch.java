@@ -142,7 +142,7 @@ public class RenderBatch implements Comparable<RenderBatch>{
         glBindVertexArray(0);
 
         for (int i = 0; i < textures.size(); i++) {
-            glActiveTexture(GL_TEXTURE0 + i);
+            glActiveTexture(GL_TEXTURE0 + i + 1);
             textures.get(i).unBind();
         }
 

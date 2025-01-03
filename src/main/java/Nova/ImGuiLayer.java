@@ -44,7 +44,7 @@ public class ImGuiLayer {
         // Initialize ImGuiIO config
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename(null); // We don't want to save .ini file
+        io.setIniFilename("imgui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -153,6 +153,15 @@ public class ImGuiLayer {
         // ------------------------------------------------------------
         // Fonts configuration
         // Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
+        // Note I got from yt comments
+        //If anyone is using a newer version of ImGui (I'm using 1.81.0), you may need to replace
+        //
+        //ImGuiFreeType.buildFontAtlas(fontAtlas, ImGuiFreeType.RasterizerFlags.LightHinting);
+        //
+        //with
+        //
+        //fontAtlas.setFlags(ImGuiFreeTypeBuilderFlags.LightHinting);
+        //fontAtlas.build();
 
         final ImFontAtlas fontAtlas = io.getFonts();
         final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
@@ -163,7 +172,7 @@ public class ImGuiLayer {
         // Add a default font, which is 'ProggyClean.ttf, 13px'
 //        fontAtlas.addFontDefault();
         fontConfig.setPixelSnapH(true);
-        fontAtlas.addFontFromFileTTF("assets/fonts/seguibli.ttf", 32, fontConfig);
+        fontAtlas.addFontFromFileTTF("assets/fonts/seguibli.ttf", 24, fontConfig);
 
 
         fontConfig.destroy(); // After all fonts were added we don't need this config more
@@ -178,10 +187,11 @@ public class ImGuiLayer {
         imGuiGl3.init("#version 330 core");
     }
 
-    public void update(float dt){
+    public void update(float dt, Scene currentScene){
         startFrame(dt);
 
         ImGui.newFrame();
+        currentScene.sceneImgui();
         ImGui.showDemoWindow();
         ImGui.render();
 

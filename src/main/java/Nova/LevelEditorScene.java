@@ -3,6 +3,8 @@ package Nova;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -10,6 +12,7 @@ import util.AssetPool;
 
 public class LevelEditorScene extends Scene{
     private GameObject obj1;
+    private GameObject obj2;
     private SpriteSheet sprites;
 
     public LevelEditorScene(){
@@ -23,14 +26,26 @@ public class LevelEditorScene extends Scene{
         this.camera = new Camera(new Vector2f());
 
         this.sprites = AssetPool.getSpriteSheet("assets/images/spritesheet.png");
-        this.obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256,256)), 1);
-        this.obj1.addComponent(new SpriteRenderer(new Vector4f(1,0,0,0)));
+        this.obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)), 1);
+        SpriteRenderer obj1Sprite = new SpriteRenderer();
+        this.obj1.addComponent(obj1Sprite);
+        obj1Sprite.setColor(new Vector4f(1,1,0,1));
         this.addGameObjectToScene(this.obj1);
         this.activeGameObject = obj1;
 
-        GameObject obj2 = new GameObject("Ob2", new Transform(new Vector2f(400, 100), new Vector2f(256,256)), 1);
-        obj2.addComponent(new SpriteRenderer(sprites.getSprite(15)));
+        this.obj2 = new GameObject("Ob2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 1);
+        SpriteRenderer obj2Sprite = new SpriteRenderer();
+        obj2.addComponent(obj2Sprite);
+        obj2Sprite.setSprite(sprites.getSprite(0));
         this.addGameObjectToScene(obj2);
+
+
+        //some gson testing (will be removed)
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+
+        System.out.println(gson.toJson(obj1));
     }
 
 
@@ -42,23 +57,8 @@ public class LevelEditorScene extends Scene{
                 ));
     }
 
-//    private int spriteInd = 0;
-//    private float spriteFlipTime = 0.0f;
-//    private float spriteFlipTimeSpeed = 5f;
     @Override
     public void update(float dt) {
-//        System.out.println("FPS: " + ((float) 1/dt));
-//        spriteFlipTime += dt*spriteFlipTimeSpeed;
-//        if(spriteFlipTime > 1){
-//            spriteInd++;
-//            spriteFlipTime = 0.0f;
-//            if(spriteInd > 25){
-//                spriteInd = 0;
-//            }
-//            this.obj1.getComponent(SpriteRenderer.class).setSprite(sprites.getSprite(spriteInd));
-//        }
-
-
         for(GameObject go : this.gameObjects){
             go.update(dt);
         }

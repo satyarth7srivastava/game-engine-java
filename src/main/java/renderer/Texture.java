@@ -14,7 +14,12 @@ public class Texture {
     private int texID;
     private int width, height;
 
-    public  Texture(String filepath){
+    public  Texture(){
+
+    }
+
+    public void init(String filepath){
+
         this.filePath = filepath;
 
         //Generating tex over the gpu
@@ -53,7 +58,6 @@ public class Texture {
         //freeing up the memory (It's actually a C library)
         stbi_image_free(image);
     }
-
     public void bind(){
        glBindTexture(GL_TEXTURE_2D, texID);
     }

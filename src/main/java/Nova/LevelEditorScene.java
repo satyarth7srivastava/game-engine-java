@@ -1,5 +1,6 @@
 package Nova;
 
+import Components.Rigidbody;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
 import imgui.ImGui;
@@ -21,15 +22,18 @@ public class LevelEditorScene extends Scene{
         loadResources();
 
         this.camera = new Camera(new Vector2f());
-        if(loadedLevel) return;
+        if(loadedLevel){
+            this.activeGameObject = gameObjects.get(0);
+            return;
+        }
 
         this.sprites = AssetPool.getSpriteSheet("assets/images/spritesheet.png");
         this.obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)), 1);
         SpriteRenderer obj1Sprite = new SpriteRenderer();
         this.obj1.addComponent(obj1Sprite);
+        this.obj1.addComponent(new Rigidbody());
         obj1Sprite.setColor(new Vector4f(1,1,0,1));
         this.addGameObjectToScene(this.obj1);
-        this.activeGameObject = obj1;
 
         this.obj2 = new GameObject("Ob2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 1);
         SpriteRenderer obj2Sprite = new SpriteRenderer();
@@ -55,7 +59,7 @@ public class LevelEditorScene extends Scene{
         this.renderer.render();
     }
 
-    @Override
-    public void imgui(){
-    }
+//    @Override
+//    public void imgui(){
+//    }
 }

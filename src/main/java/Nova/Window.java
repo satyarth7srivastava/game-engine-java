@@ -41,17 +41,16 @@ public class Window {
         switch (newScene){
             case 0:
                 currentScene = new LevelEditorScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             case 1:
                 currentScene = new LevelScene();
-                currentScene.init();
-                currentScene.start();
                 break;
             default:
                 assert false: "Unknown Scene";
         }
+        currentScene.load();
+        currentScene.init();
+        currentScene.start();
     }
 
     public static  Window get(){
@@ -140,7 +139,6 @@ public class Window {
         float endTime;
         float dt = -1.0f; // It is the time per frame
 
-        currentScene.load();
         while(!glfwWindowShouldClose(glfwWindow)){
             //POLL events
             glfwPollEvents();

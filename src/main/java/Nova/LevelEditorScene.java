@@ -1,10 +1,7 @@
 package Nova;
 
-import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -24,6 +21,7 @@ public class LevelEditorScene extends Scene{
         loadResources();
 
         this.camera = new Camera(new Vector2f());
+        if(loadedLevel) return;
 
         this.sprites = AssetPool.getSpriteSheet("assets/images/spritesheet.png");
         this.obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)), 1);
@@ -38,14 +36,6 @@ public class LevelEditorScene extends Scene{
         obj2.addComponent(obj2Sprite);
         obj2Sprite.setSprite(sprites.getSprite(0));
         this.addGameObjectToScene(obj2);
-
-
-        //some gson testing (will be removed)
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
-
-        System.out.println(gson.toJson(obj1));
     }
 
 
@@ -67,8 +57,5 @@ public class LevelEditorScene extends Scene{
 
     @Override
     public void imgui(){
-        ImGui.begin("Test");
-        ImGui.text("Random stuff");
-        ImGui.end();
     }
 }

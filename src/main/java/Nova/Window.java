@@ -140,6 +140,7 @@ public class Window {
         float endTime;
         float dt = -1.0f; // It is the time per frame
 
+        currentScene.load();
         while(!glfwWindowShouldClose(glfwWindow)){
             //POLL events
             glfwPollEvents();
@@ -154,16 +155,6 @@ public class Window {
 
             this.imGuiLayer.update(dt, currentScene);
 
-            //testing
-//            if(fade){
-//                r = Math.max(r - 0.01f, (float) 0.5);
-//                g = Math.max(g - 0.01f, 0);
-//                b = Math.max(b - 0.01f, 0);
-//            }
-//            if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)){
-//                fade = true;
-//            }
-
 
             glfwSwapBuffers(glfwWindow);
 
@@ -171,6 +162,7 @@ public class Window {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
+        currentScene.saveExit();
     }
 
     public static int getWidth(){

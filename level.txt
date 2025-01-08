@@ -6,9 +6,9 @@
         "type": "Components.SpriteRenderer",
         "properties": {
           "color": {
-            "x": 0.3420889,
-            "y": 0.45925143,
-            "z": 0.5966667,
+            "x": 1.0,
+            "y": 1.0,
+            "z": 0.0,
             "w": 1.0
           },
           "sprite": {
@@ -38,12 +38,12 @@
       {
         "type": "Components.Rigidbody",
         "properties": {
-          "colliderType": 10,
-          "friction": 8.0,
+          "colliderType": 0,
+          "friction": 0.8,
           "velocity": {
             "x": 0.0,
             "y": 0.5,
-            "z": 9.0
+            "z": 0.0
           }
         }
       }
@@ -73,29 +73,29 @@
             "w": 1.0
           },
           "sprite": {
-            "width": 0.0,
-            "height": 0.0,
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
-              "filePath": "assets/images/spritesheet.png",
+              "filePath": "assets/images/s1/decAndblock.png",
               "texID": 2,
-              "width": 224,
-              "height": 32
+              "width": 112,
+              "height": 192
             },
             "texCoords": [
               {
-                "x": 0.071428575,
+                "x": 0.42857143,
                 "y": 1.0
               },
               {
-                "x": 0.071428575,
-                "y": 0.5
+                "x": 0.42857143,
+                "y": 0.9166667
               },
               {
-                "x": 0.0,
-                "y": 0.5
+                "x": 0.2857143,
+                "y": 0.9166667
               },
               {
-                "x": 0.0,
+                "x": 0.2857143,
                 "y": 1.0
               }
             ]

@@ -1,16 +1,19 @@
-package Nova;
+package scenes;
 
 import Components.Rigidbody;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import Components.SpriteSheet;
+import Nova.Camera;
+import Nova.GameObject;
+import Nova.Transform;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import util.AssetPool;
 
-public class LevelEditorScene extends Scene{
+public class LevelEditorScene extends Scene {
     private GameObject obj1;
     private GameObject obj2;
     private SpriteSheet sprites;

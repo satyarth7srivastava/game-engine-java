@@ -1,7 +1,5 @@
 package Components;
 
-import Nova.Component;
-
 public class FontRenderer extends Component {
 
 

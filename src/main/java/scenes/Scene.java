@@ -1,5 +1,10 @@
-package Nova;
+package scenes;
 
+import Components.Component;
+import Components.ComponentDeserializer;
+import Nova.Camera;
+import Nova.GameObject;
+import Nova.GameObjectDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
@@ -14,7 +19,7 @@ import java.util.List;
 
 public abstract class Scene {
 
-    protected  Camera camera;
+    protected Camera camera;
     protected List<GameObject> gameObjects = new ArrayList<>();
     protected Renderer renderer = new Renderer();
     protected boolean loadedLevel = false;

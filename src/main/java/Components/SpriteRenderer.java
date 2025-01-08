@@ -5,7 +5,6 @@ import imgui.ImGui;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Texture;
-import Nova.Component;
 import Nova.Transform;
 
 public class SpriteRenderer extends Component {

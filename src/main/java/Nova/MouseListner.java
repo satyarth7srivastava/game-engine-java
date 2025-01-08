@@ -1,5 +1,7 @@
 package Nova;
 
+import org.joml.Vector4f;
+
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
@@ -24,6 +26,24 @@ public class MouseListner {
             MouseListner.instance = new MouseListner();
         }
         return MouseListner.instance;
+    }
+
+    public static float getOrthoX(){
+        float cX = getX();
+        cX = (cX / (float)Window.getWidth()) * 2f - 1f;
+        Vector4f tmp = new Vector4f(cX, 0, 0, 1);
+        tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+        cX = tmp.x;
+        return cX;
+    }
+
+    public static float getOrthoY(){
+        float cY = getY();
+        cY = (cY / (float)Window.getWidth()) * 2f - 1f;
+        Vector4f tmp = new Vector4f(0, cY, 0, 1);
+        tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+        cY = tmp.y;
+        return cY;
     }
 
     public static void mousePosCallback(long window, double xpos, double ypos){

@@ -14,6 +14,10 @@ public class Texture {
     private int texID;
     private int width, height;
 
+    public int getTexID() {
+        return texID;
+    }
+
     public  Texture(){
 
     }

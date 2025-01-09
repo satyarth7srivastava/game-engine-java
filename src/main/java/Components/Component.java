@@ -10,6 +10,10 @@ import java.lang.reflect.Modifier;
 
 public abstract class Component {
 
+    private static int ID_counter = 0; //this is global to component class
+    private  int uid = -1;             //while this is of that component instance that is
+                                       //is being created
+
     public transient GameObject gameObject = null;
 
     public void update(float dt){
@@ -74,6 +78,20 @@ public abstract class Component {
         } catch (IllegalAccessException e){
             e.printStackTrace();
         }
+    }
+
+    public void generateId(){
+        if(this.uid == -1){
+            this.uid = ID_counter++;
+        }
+    }
+
+    public int getUid(){
+        return this.uid;
+    }
+
+    public static void init(int maxId){
+        ID_counter = maxId;
     }
 
 }

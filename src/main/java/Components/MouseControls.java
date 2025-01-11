@@ -4,6 +4,7 @@ package Components;
 import Nova.GameObject;
 import Nova.MouseListner;
 import Nova.Window;
+import util.Settings;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -23,8 +24,12 @@ public class MouseControls extends Component {
     @Override
     public void update(float dt) {
         if(holdingObj != null){
-            holdingObj.transform.position.x = MouseListner.getOrthoX() - 16;
-            holdingObj.transform.position.y = MouseListner.getOrthoY() - 16;
+            holdingObj.transform.position.x = MouseListner.getOrthoX();
+            holdingObj.transform.position.y = MouseListner.getOrthoY();
+
+            //snapping it according to the grid
+            holdingObj.transform.position.x = ((int) holdingObj.transform.position.x / Settings.GRID_WIDTH) * Settings.GRID_WIDTH;
+            holdingObj.transform.position.y = ((int) holdingObj.transform.position.y / Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT;
 
             if(MouseListner.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)){
                 place();

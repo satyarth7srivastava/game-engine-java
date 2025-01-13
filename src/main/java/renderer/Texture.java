@@ -11,7 +11,7 @@ import static org.lwjgl.stb.STBImage.*;
 public class Texture {
 
     private  String filePath;
-    private int texID;
+    private transient int texID;
     private int width, height;
 
     public int getTexID() {
@@ -19,7 +19,20 @@ public class Texture {
     }
 
     public  Texture(){
+        texID = -1;
+        width = -1;
+        height = -1;
+    }
 
+    public Texture(int width, int height){
+        this.filePath = "Generated";
+
+        //Generating texture over the GPU
+        texID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, texID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                        0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     }
 
     public void init(String filepath){

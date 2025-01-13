@@ -4,10 +4,13 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import renderer.DebugDraw;
+import renderer.FrameBuffer;
 import scenes.LevelEditorScene;
 import scenes.LevelScene;
 import scenes.Scene;
 import util.Time;
+
+import java.awt.*;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -20,6 +23,7 @@ public class Window {
     private String title;
     private long glfwWindow;
     private ImGuiLayer imGuiLayer;
+    private FrameBuffer frameBuffer;
 
     //for testing only
     public float r, g, b, a;
@@ -135,6 +139,8 @@ public class Window {
         this.imGuiLayer = new ImGuiLayer(glfwWindow);
         this.imGuiLayer.initImGui();
 
+        this.frameBuffer = new FrameBuffer(2560, 1440);
+
         Window.changeScene(0);
     }
 
@@ -152,11 +158,13 @@ public class Window {
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
+//            this.frameBuffer.bind();
             //testing our dt as well as scene update
             if(dt >= 0) {
                 DebugDraw.draw();
                 currentScene.update(dt);
             }
+            this.frameBuffer.unbind();
 
             this.imGuiLayer.update(dt, currentScene);
 

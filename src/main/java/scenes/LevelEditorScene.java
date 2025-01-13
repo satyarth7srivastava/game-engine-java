@@ -36,7 +36,9 @@ public class LevelEditorScene extends Scene {
 
         DebugDraw.addLine2D(new Vector2f(0,0), new Vector2f(800, 800), new Vector3f(1,0,0), 165);
         if(loadedLevel){
-            this.activeGameObject = gameObjects.get(0);
+            if (gameObjects.size() > 0) {
+                this.activeGameObject = gameObjects.get(0);
+            }
             return;
         }
 
@@ -61,6 +63,15 @@ public class LevelEditorScene extends Scene {
                 new SpriteSheet(AssetPool.getTexture("assets/images/s1/decAndblock.png"),
                         16, 16, 81, 0
                 ));
+
+        for(GameObject g : gameObjects){
+            if (g.getComponent(SpriteRenderer.class) != null){
+                SpriteRenderer spr = g.getComponent(SpriteRenderer.class);
+                if (spr.getTexture() != null){
+                    spr.setTexture(AssetPool.getTexture(spr.getTexture().getFilePath()));
+                }
+            }
+        }
     }
 
     float angle = 0.0f;

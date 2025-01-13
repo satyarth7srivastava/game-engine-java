@@ -5,6 +5,7 @@ package Nova;
 *   by me according to the requirement
 */
 
+import editor.GameViewWindow;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
 import imgui.ImGui;
@@ -202,6 +203,7 @@ public class ImGuiLayer {
         setupDockspace();
         currentScene.sceneImgui();
         ImGui.showDemoWindow();
+        GameViewWindow.imgui();
 
         //ending of windows must be before rendering
         ImGui.end();

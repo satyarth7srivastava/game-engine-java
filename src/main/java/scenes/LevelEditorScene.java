@@ -78,9 +78,9 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float dt) {
         levelEditorStuff.update(dt);
-        DebugDraw.addCircle(new Vector2f(400, 150), 64, new Vector3f(0, 1, 1), 1);
-        DebugDraw.addBox2D(new Vector2f(200f, 200f), new Vector2f(64, 32), angle, new Vector3f(1,0,0), 1);
-        angle += 0.5f;
+//        DebugDraw.addCircle(new Vector2f(400, 150), 64, new Vector3f(0, 1, 1), 1);
+//        DebugDraw.addBox2D(new Vector2f(200f, 200f), new Vector2f(64, 32), angle, new Vector3f(1,0,0), 1);
+//        angle += 0.5f;
 
         for(GameObject go : this.gameObjects){
             go.update(dt);

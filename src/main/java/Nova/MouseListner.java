@@ -1,5 +1,7 @@
 package Nova;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -11,6 +13,8 @@ public class MouseListner {
     private double xPos, yPos, lastY, lastX;
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean isDragging;
+    private Vector2f gameViewPos = new Vector2f();
+    private Vector2f gameViewSize = new Vector2f();
 
     private MouseListner(){
         this.scrollX = 0.0;
@@ -29,19 +33,25 @@ public class MouseListner {
     }
 
     public static float getOrthoX(){
-        float cX = getX();
-        cX = (cX / (float)Window.getWidth()) * 2f - 1f;
+        float cX = getX() - get().gameViewPos.x;
+        cX = (cX / get().gameViewSize.x) * 2f - 1f;
         Vector4f tmp = new Vector4f(cX, 0, 0, 1);
-        tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+        Camera camera = Window.getScene().getCamera();
+        Matrix4f viewProjection = new Matrix4f();
+        camera.getInverseView().mul(camera.getInverseProjection(), viewProjection);
+        tmp.mul(viewProjection);
         cX = tmp.x;
         return cX;
     }
 
     public static float getOrthoY(){
-        float cY = Window.getHeight() - getY();
-        cY = (cY / (float)Window.getHeight()) * 2f - 1f;
+        float cY = getY() - get().gameViewPos.y;
+        cY = -((cY / get().gameViewSize.y) * 2f - 1f);
         Vector4f tmp = new Vector4f(0, cY, 0, 1);
-        tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+        Camera camera = Window.getScene().getCamera();
+        Matrix4f viewProjection = new Matrix4f();
+        camera.getInverseView().mul(camera.getInverseProjection(), viewProjection);
+        tmp.mul(viewProjection);
         cY = tmp.y;
         return cY;
     }
@@ -113,5 +123,13 @@ public class MouseListner {
         }else{
             return false;
         }
+    }
+
+    public static void setGameViewPos(Vector2f gameViewPos) {
+        get().gameViewPos.set(gameViewPos);
+    }
+
+    public static void setGameViewSize(Vector2f gameViewSize) {
+        get().gameViewSize.set(gameViewSize);
     }
 }

@@ -1,11 +1,15 @@
 package editor;
 
+import Nova.MouseListner;
 import Nova.Window;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
+import org.joml.Vector2f;
 
 public class GameViewWindow {
+
+    private static float leftX, rightX, bottomY, topY;
 
     public static void imgui(){
         ImGui.begin("Game Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
@@ -13,9 +17,24 @@ public class GameViewWindow {
         ImVec2 windowSize = getLargestSizeForViewport();
         ImVec2 windowPos = getCenterPositionForViewport(windowSize);
 
+
         ImGui.setCursorPos(windowPos.x, windowPos.y);
+
+        ImVec2 topleft = new ImVec2();
+        ImGui.getCursorScreenPos(topleft);
+        topleft.x -= ImGui.getScrollX();
+        topleft.y -= ImGui.getScrollY();
+
+        leftX = topleft.x;
+        rightX = topleft.x + windowSize.x;
+        bottomY = topleft.y;
+        topY = topleft.y + windowSize.y;
+
         int textureId = Window.getFrameBuffer().getTextureId();
         ImGui.image(textureId, windowSize.x, windowSize.y, 0, 1, 1, 0);
+
+        MouseListner.setGameViewPos(new Vector2f(topleft.x, topleft.y));
+        MouseListner.setGameViewSize(new Vector2f(windowSize.x, windowSize.y));
 
         ImGui.end();
     }
@@ -45,5 +64,10 @@ public class GameViewWindow {
         float viewPortX = (windowSize.x / 2.0f) - (aspectSize.x / 2.0f);
         float viewPortY = (windowSize.y / 2.0f) - (aspectSize.y / 2.0f);
         return new ImVec2(viewPortX + ImGui.getCursorPosX(), viewPortY + ImGui.getCursorPosY());
+    }
+
+    public static boolean getWantCaptureMouse(){
+        return (MouseListner.getX() >= leftX && MouseListner.getX() <= rightX
+                && MouseListner.getY() >= bottomY && MouseListner.getY() <= topY);
     }
 }

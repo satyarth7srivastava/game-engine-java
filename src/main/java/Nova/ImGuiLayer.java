@@ -24,6 +24,8 @@ public class ImGuiLayer {
     // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
 
+    private GameViewWindow gameViewWindow;
+
     // LWJGL3 renderer (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
 
@@ -32,6 +34,7 @@ public class ImGuiLayer {
 
     public ImGuiLayer(long glfwWindow){
         this.glfwWindow = glfwWindow;
+        this.gameViewWindow = new GameViewWindow();
     }
 
     // Initialize Dear ImGui.
@@ -130,7 +133,7 @@ public class ImGuiLayer {
                 ImGui.setWindowFocus(null);
             }
 
-            if(!io.getWantCaptureMouse() || GameViewWindow.getWantCaptureMouse()){
+            if(!io.getWantCaptureMouse() || gameViewWindow.getWantCaptureMouse()){
                 MouseListner.mouseButtonCallback(w, button, action, mods);
             }
 
@@ -204,7 +207,7 @@ public class ImGuiLayer {
         setupDockspace();
         currentScene.sceneImgui();
         ImGui.showDemoWindow();
-        GameViewWindow.imgui();
+        gameViewWindow.imgui();
 
         //ending of windows must be before rendering
         ImGui.end();

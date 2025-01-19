@@ -125,6 +125,18 @@ public class MouseListner {
         }
     }
 
+    public static float getScreenX(){
+        float cX = getX() - get().gameViewPos.x;
+        cX = (cX / get().gameViewSize.x) * 2560f;
+        return cX;
+    }
+
+    public static float getScreenY(){
+        float cY = getY() - get().gameViewPos.y;
+        cY = 1440f - ((cY / get().gameViewSize.y) * 1440f);
+        return cY;
+    }
+
     public static void setGameViewPos(Vector2f gameViewPos) {
         get().gameViewPos.set(gameViewPos);
     }

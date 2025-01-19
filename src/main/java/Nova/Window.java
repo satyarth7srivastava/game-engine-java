@@ -3,11 +3,11 @@ package Nova;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
-import renderer.DebugDraw;
-import renderer.FrameBuffer;
+import renderer.*;
 import scenes.LevelEditorScene;
 import scenes.LevelScene;
 import scenes.Scene;
+import util.AssetPool;
 import util.Time;
 
 import java.awt.*;
@@ -24,6 +24,7 @@ public class Window {
     private long glfwWindow;
     private ImGuiLayer imGuiLayer;
     private FrameBuffer frameBuffer;
+    private PickingTexture pickingTexture;
 
     //for testing only
     public float r, g, b, a;
@@ -140,7 +141,9 @@ public class Window {
         this.imGuiLayer.initImGui();
 
         this.frameBuffer = new FrameBuffer(2560, 1440);
+        this.pickingTexture = new PickingTexture(2560, 1440);
         glViewport(0, 0,2560, 1440);
+
 
         Window.changeScene(0);
     }
@@ -150,10 +153,35 @@ public class Window {
         float endTime;
         float dt = -1.0f; // It is the time per frame
 
+        Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
+        Shader pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
         while(!glfwWindowShouldClose(glfwWindow)){
             //POLL events
             glfwPollEvents();
 
+            //Render pass 1. Render to picking texture
+
+            glDisable(GL_BLEND);
+            pickingTexture.enableWriting();
+
+            glViewport(0, 0, 2560, 1440);
+            glClearColor(0,0,0,0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            Renderer.bindShader(pickingShader);
+            currentScene.render();
+
+            if (MouseListner.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)){
+                int x = (int) MouseListner.getScreenX();
+                int y = (int) MouseListner.getScreenY();
+                int id = pickingTexture.readPixel(x, y);
+                System.out.println(id);
+            }
+            pickingTexture.disableWriting();
+            glEnable(GL_BLEND);
+
+
+            //Render pass 2. Render actual game texture
             DebugDraw.beginFrame();
 
             this.frameBuffer.bind();
@@ -162,8 +190,10 @@ public class Window {
 
             //testing our dt as well as scene update
             if(dt >= 0) {
+                Renderer.bindShader(defaultShader);
                 DebugDraw.draw();
                 currentScene.update(dt);
+                currentScene.render();
             }
             this.frameBuffer.unbind();
 

@@ -1,5 +1,6 @@
 package Components;
 
+import Nova.Camera;
 import Nova.Window;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -10,17 +11,18 @@ public class GridLines extends Component{
 
     @Override
     public void update(float dt){
-        Vector2f cameraPos = Window.getScene().getCamera().position;
-        Vector2f projectionSize = Window.getScene().getCamera().getProjectionSize();
+        Camera camera = Window.getScene().getCamera();
+        Vector2f cameraPos = camera.position;
+        Vector2f projectionSize = camera.getProjectionSize();
 
         int firstX = ((int) (cameraPos.x / Settings.GRID_WIDTH) * Settings.GRID_WIDTH);
         int firstY = ((int) (cameraPos.y / Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT);
 
-        int numVtLines = (int) (projectionSize.x / Settings.GRID_WIDTH);
-        int numHzLines = (int) (projectionSize.y / Settings.GRID_HEIGHT);
+        int numVtLines = (int) (projectionSize.x * camera.getZoom() / Settings.GRID_WIDTH);
+        int numHzLines = (int) (projectionSize.y * camera.getZoom() / Settings.GRID_HEIGHT);
 
-        int height = (int) projectionSize.y;
-        int width = (int) projectionSize.x;
+        int height = (int) (projectionSize.y * camera.getZoom());
+        int width = (int) (projectionSize.x * camera.getZoom());
 
         int maxLines = Math.max(numVtLines,numHzLines);
         Vector3f color = new Vector3f(0.2f,0.2f,0.2f);

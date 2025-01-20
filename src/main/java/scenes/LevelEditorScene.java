@@ -26,21 +26,17 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        this.camera = new Camera(new Vector2f());
         levelEditorStuff.addComponent(new MouseControls());
         levelEditorStuff.addComponent(new GridLines());
+        levelEditorStuff.addComponent(new EditorCamera(this.camera));
 
         loadResources();
         this.sprites = AssetPool.getSpriteSheet("assets/images/s1/decAndblock.png");
 
-        this.camera = new Camera(new Vector2f());
 
         DebugDraw.addLine2D(new Vector2f(0,0), new Vector2f(800, 800), new Vector3f(1,0,0), 165);
-        if(loadedLevel){
-            if (gameObjects.size() > 0) {
-                this.activeGameObject = gameObjects.get(0);
-            }
-            return;
-        }
+
 
 //        this.obj1 = new GameObject("Ob1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)), 1);
 //        SpriteRenderer obj1Sprite = new SpriteRenderer();
@@ -78,6 +74,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float dt) {
         levelEditorStuff.update(dt);
+        this.camera.adjustProjection();
 //        DebugDraw.addCircle(new Vector2f(400, 150), 64, new Vector3f(0, 1, 1), 1);
 //        DebugDraw.addBox2D(new Vector2f(200f, 200f), new Vector2f(64, 32), angle, new Vector3f(1,0,0), 1);
 //        angle += 0.5f;

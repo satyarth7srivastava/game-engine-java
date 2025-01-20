@@ -6,6 +6,7 @@ package Nova;
 */
 
 import editor.GameViewWindow;
+import editor.PropertiesWindow;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
 import imgui.ImGui;
@@ -15,11 +16,14 @@ import imgui.callback.ImStrSupplier;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.type.ImBoolean;
+import renderer.PickingTexture;
 import scenes.Scene;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class ImGuiLayer {
+    //properties window
+    private PropertiesWindow propertiesWindow;
 
     // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -32,9 +36,10 @@ public class ImGuiLayer {
 
     private long glfwWindow;
 
-    public ImGuiLayer(long glfwWindow){
+    public ImGuiLayer(long glfwWindow, PickingTexture pickingTexture){
         this.glfwWindow = glfwWindow;
         this.gameViewWindow = new GameViewWindow();
+        this.propertiesWindow = new PropertiesWindow(pickingTexture);
     }
 
     // Initialize Dear ImGui.
@@ -142,6 +147,7 @@ public class ImGuiLayer {
         glfwSetScrollCallback(glfwWindow, (w, xOffset, yOffset) -> {
             io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
             io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+            MouseListner.mouseScrollCallback(w, xOffset, yOffset);
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
@@ -205,10 +211,11 @@ public class ImGuiLayer {
 
         ImGui.newFrame();
         setupDockspace();
-        currentScene.sceneImgui();
+        currentScene.imgui();
         ImGui.showDemoWindow();
         gameViewWindow.imgui();
-
+        propertiesWindow.update(dt, currentScene);
+        propertiesWindow.imgui();
         //ending of windows must be before rendering
         ImGui.end();
         ImGui.render();

@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Scene {
 
@@ -23,7 +24,6 @@ public abstract class Scene {
     protected List<GameObject> gameObjects = new ArrayList<>();
     protected Renderer renderer = new Renderer();
     protected boolean loadedLevel = false;
-    protected GameObject activeGameObject = null;
     private boolean isRunning = false;
 
     public Scene(){
@@ -58,15 +58,6 @@ public abstract class Scene {
         return this.camera;
     }
 
-    public void sceneImgui(){
-        if(activeGameObject != null){
-            ImGui.begin("Inspector");
-            activeGameObject.imgui();
-            ImGui.end();
-        }
-
-        imgui();
-    }
 
     public void imgui(){
 
@@ -101,19 +92,19 @@ public abstract class Scene {
             e.printStackTrace();
         }
 
-        if(!inFile.isEmpty()){
+        if(!inFile.isEmpty()) {
             int maxGoId = -1;
             int maxCompId = -1;
             GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
-            for (int i = 0; i < objs.length; i++){
+            for (int i = 0; i < objs.length; i++) {
                 addGameObjectToScene(objs[i]);
 
-                for(Component c : objs[i].getAllComponents()){
-                    if ((c.getUid() > maxCompId)){
+                for (Component c : objs[i].getAllComponents()) {
+                    if ((c.getUid() > maxCompId)) {
                         maxCompId = c.getUid();
                     }
                 }
-                if (objs[i].getUid() > maxGoId){
+                if (objs[i].getUid() > maxGoId) {
                     maxGoId = objs[i].getUid();
                 }
             }
@@ -124,5 +115,12 @@ public abstract class Scene {
             Component.init(maxCompId);
             this.loadedLevel = true;
         }
+    }
+
+    public GameObject getGameObject(int gameObjectId){
+        Optional<GameObject> res = this.gameObjects.stream()
+                .filter(gameObject -> gameObject.getUid() == gameObjectId)
+                .findFirst();
+        return res.orElse(null);
     }
 }

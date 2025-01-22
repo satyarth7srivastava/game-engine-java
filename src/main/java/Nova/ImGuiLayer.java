@@ -277,4 +277,8 @@ public class ImGuiLayer {
         //DockSpace
         ImGui.dockSpace(ImGui.getID("DoackSpaceID"));
     }
+
+    public PropertiesWindow getPropertiesWindow() {
+        return propertiesWindow;
+    }
 }

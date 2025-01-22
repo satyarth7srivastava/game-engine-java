@@ -2,6 +2,8 @@ package renderer;
 
 import Components.SpriteRenderer;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import Nova.Window;
@@ -174,6 +176,15 @@ public class RenderBatch implements Comparable<RenderBatch>{
             }
         }
 
+        boolean isRotated = spr.gameObject.transform.rotation != 0.0f;
+        Matrix4f transformMatrix = new Matrix4f().identity();
+        if (isRotated){
+            transformMatrix.translate(spr.gameObject.transform.position.x,
+                            spr.gameObject.transform.position.y, 0);
+            transformMatrix.rotate((float) Math.toRadians(spr.gameObject.transform.rotation), 0, 0, 1);
+            transformMatrix.scale(spr.gameObject.transform.scale.x, spr.gameObject.transform.scale.y, 0);
+        }
+
         //Add vertices with the appropriate properties
         float xAdd = 1.0f;
         float yAdd = 1.0f;
@@ -186,9 +197,15 @@ public class RenderBatch implements Comparable<RenderBatch>{
                 yAdd = 1.0f;
             }
 
+            Vector4f currentPos = new Vector4f(spr.gameObject.transform.position.x + (xAdd * spr.gameObject.transform.scale.x),
+                    spr.gameObject.transform.position.y + (yAdd * spr.gameObject.transform.scale.y), 0, 1);
+
+            if (isRotated){
+                currentPos = new Vector4f(xAdd, yAdd, 0, 1).mul(transformMatrix);
+            }
             //loading position
-            vertices[offset] = spr.gameObject.transform.position.x + (xAdd * spr.gameObject.transform.scale.x);
-            vertices[offset + 1] = spr.gameObject.transform.position.y + (yAdd * spr.gameObject.transform.scale.y);
+            vertices[offset] = currentPos.x;
+            vertices[offset + 1] = currentPos.y;
 
             //loading colors
             vertices[offset + 2] = color.x;

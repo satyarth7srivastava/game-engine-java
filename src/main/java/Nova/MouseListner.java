@@ -10,11 +10,13 @@ import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 public class MouseListner {
     private static MouseListner instance;
     private double scrollX, scrollY;
-    private double xPos, yPos, lastY, lastX;
+    private double xPos, yPos, lastY, lastX, worldX, worldY, lastWorldX, lastWorldY;
     private boolean mouseButtonPressed[] = new boolean[3];
     private boolean isDragging;
     private Vector2f gameViewPos = new Vector2f();
     private Vector2f gameViewSize = new Vector2f();
+
+    private int mouseButtonDown = 0;
 
     private MouseListner(){
         this.scrollX = 0.0;
@@ -25,6 +27,7 @@ public class MouseListner {
         this.lastY = 0.0;
     }
 
+
     public static MouseListner get(){
         if(MouseListner.instance == null){
             MouseListner.instance = new MouseListner();
@@ -32,7 +35,7 @@ public class MouseListner {
         return MouseListner.instance;
     }
 
-    public static float getOrthoX(){
+    private static void calcOrthoX(){
         float cX = getX() - get().gameViewPos.x;
         cX = (cX / get().gameViewSize.x) * 2f - 1f;
         Vector4f tmp = new Vector4f(cX, 0, 0, 1);
@@ -41,10 +44,9 @@ public class MouseListner {
         camera.getInverseView().mul(camera.getInverseProjection(), viewProjection);
         tmp.mul(viewProjection);
         cX = tmp.x;
-        return cX;
+        get().worldX = cX;
     }
-
-    public static float getOrthoY(){
+    private static void calcOrthoY(){
         float cY = getY() - get().gameViewPos.y;
         cY = -((cY / get().gameViewSize.y) * 2f - 1f);
         Vector4f tmp = new Vector4f(0, cY, 0, 1);
@@ -53,27 +55,43 @@ public class MouseListner {
         camera.getInverseView().mul(camera.getInverseProjection(), viewProjection);
         tmp.mul(viewProjection);
         cY = tmp.y;
-        return cY;
+        get().worldY = cY;
+    }
+
+    public static float getOrthoX(){
+        return (float)get().worldX;
+    }
+
+    public static float getOrthoY(){
+        return (float) get().worldY;
     }
 
     public static void mousePosCallback(long window, double xpos, double ypos){
+        if (get().mouseButtonDown > 0){
+            get().isDragging = true;
+        }
+
         get().lastX = get().xPos;
         get().lastY = get().yPos;
+        get().lastWorldX = get().worldX;
+        get().lastWorldY = get().worldY;
         get().xPos = xpos;
         get().yPos = ypos;
-        boolean _check = false;
-        for (int i = 0; i < 3; i++) {
-            if(get().mouseButtonPressed[i]) _check = true;
-        }
-        get().isDragging = _check;
+        calcOrthoX();
+        calcOrthoY();
+
     }
 
     public static void mouseButtonCallback(long window, int button, int action, int mods){
         if (action == GLFW_PRESS) {
+            get().mouseButtonDown++;
+
             if(button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = true;
             }
         } else if(action == GLFW_RELEASE){
+            get().mouseButtonDown--;
+
             if(button < get().mouseButtonPressed.length) {
                 get().mouseButtonPressed[button] = false;
                 get().isDragging = false;
@@ -91,6 +109,8 @@ public class MouseListner {
         get().scrollY = 0;
         get().lastY = get().yPos;
         get().lastX = get().xPos;
+        get().lastWorldY = get().worldY;
+        get().lastWorldX = get().worldX;
     }
 
     public static float getX(){
@@ -103,8 +123,17 @@ public class MouseListner {
     public static float getDx(){
         return (float) (get().lastX - get().xPos);
     }
+
+    public static float getWorldDx(){
+        return (float) (get().lastWorldX - get().worldX);
+    }
+
     public static float getDy(){
         return (float) (get().lastY - get().yPos);
+    }
+
+    public static float getWorldDy(){
+        return (float) (get().lastWorldY - get().worldY);
     }
 
     public static float getScrollX(){

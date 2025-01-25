@@ -11,7 +11,7 @@ public class GameObject {
     private int uid = -1;
     private boolean doSerialization = true;
 
-    private String name;
+    public String name;
     private List<Component> components;
     public Transform transform;
     private int zIndex;
@@ -61,7 +61,8 @@ public class GameObject {
     }
 
     public void start(){
-        for (Component component : components) {
+        for (int i = 0; i < components.size(); i++) {
+            Component component = components.get(i);
             component.start();
         }
     }

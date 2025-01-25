@@ -1,5 +1,6 @@
 package editor;
 
+import Components.NonPickable;
 import Nova.GameObject;
 import Nova.MouseListner;
 import imgui.ImGui;
@@ -28,7 +29,12 @@ public class PropertiesWindow {
             int x = (int) MouseListner.getScreenX();
             int y = (int) MouseListner.getScreenY();
             int gameObjectId = pickingTexture.readPixel(x, y);
-            activeGameObject = currentScene.getGameObject(gameObjectId);
+            GameObject pickObj = currentScene.getGameObject(gameObjectId);
+            if (pickObj != null && pickObj.getComponent(NonPickable.class) == null){
+                activeGameObject = pickObj;
+            } else if (pickObj == null && !MouseListner.isDragging()) {
+                activeGameObject = null;
+            }
             this.debounce = 0.2f;
         }
     }

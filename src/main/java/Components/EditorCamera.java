@@ -1,6 +1,7 @@
 package Components;
 
 import Nova.Camera;
+import Nova.KeyListener;
 import Nova.MouseListner;
 import org.joml.Vector2f;
 
@@ -41,7 +42,7 @@ public class EditorCamera extends Component{
             dragDebounce = 0.1f;
         }
 
-        if(MouseListner.getScrollY() != 0.0f){
+        if(MouseListner.getScrollY() != 0.0f && KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL)){
             float addValue = (float) Math.pow(Math.abs(MouseListner.getScrollY() * scrollSensitivity),
                     1/levelEditorCamera.getZoom());
             addValue *= Math.signum(MouseListner.getScrollY());

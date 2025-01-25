@@ -5,6 +5,7 @@ import Components.ComponentDeserializer;
 import Nova.Camera;
 import Nova.GameObject;
 import Nova.GameObjectDeserializer;
+import Nova.Transform;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
@@ -62,6 +63,14 @@ public abstract class Scene {
     public void imgui(){
 
     }
+
+    public GameObject createGameObject(String name){
+        GameObject go = new GameObject(name);
+        go.addComponent(new Transform());
+        go.transform = go.getComponent(Transform.class);
+        return go;
+    }
+
     public void saveExit(){
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()

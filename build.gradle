@@ -6,6 +6,9 @@ group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     mavenCentral()
 }
 
@@ -26,6 +29,9 @@ project.ext.imguiVersion = '1.77-0.17.1'
 
 
 dependencies {
+    // JBox2D
+    implementation name: 'jbox2d-library'
+
     //GSON stuff
     implementation 'com.google.code.gson:gson:2.11.0'
     //IMGUI stuff

@@ -37,11 +37,11 @@ public class LevelEditorScene extends Scene {
 //        levelEditorStuff.addComponent(new TranslateGizmo(gizmos.getSprite(1), Window.getImGuiLayer().getPropertiesWindow()));
 //        levelEditorStuff.addComponent(new ScaleGizmo(gizmos.getSprite(2), Window.getImGuiLayer().getPropertiesWindow()));
 
-        System.out.println("Added the stuffs now going to start");
+
 
         levelEditorStuff.start();
 
-        System.out.println("start of components done");
+
 
 
 //        DebugDraw.addLine2D(new Vector2f(0,0), new Vector2f(800, 800), new Vector3f(1,0,0), 165);

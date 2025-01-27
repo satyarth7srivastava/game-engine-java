@@ -1,6 +1,7 @@
 package Nova;
 
 import Components.Component;
+import editor.NImGui;
 import org.joml.Vector2f;
 
 public class Transform extends Component {

@@ -16,11 +16,8 @@ public class GizmoSystem extends Component{
 
     @Override
     public void start(){
-        System.out.println("Inside the adding components for the gizmo system");
-        System.out.println("Current game object = " + gameObject.name);
         gameObject.addComponent(new TranslateGizmo(gizmos.getSprite(1), Window.getImGuiLayer().getPropertiesWindow()));
         gameObject.addComponent(new ScaleGizmo(gizmos.getSprite(2), Window.getImGuiLayer().getPropertiesWindow()));
-        System.out.println("adding of translate and scale done");
     }
 
     @Override

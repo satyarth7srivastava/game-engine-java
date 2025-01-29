@@ -1,16 +1,18 @@
 package Nova;
 
+import observers.EventSystem;
+import observers.Observer;
+import observers.events.Event;
+import observers.events.EventType;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import renderer.*;
-import scenes.LevelEditorScene;
-import scenes.LevelScene;
+import scenes.LevelEditorSceneInitializer;
 import scenes.Scene;
+import scenes.SceneInitializer;
 import util.AssetPool;
 import util.Time;
-
-import java.awt.*;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -18,7 +20,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 
-public class Window {
+public class Window implements Observer {
     private int width, height;
     private String title;
     private long glfwWindow;
@@ -26,9 +28,6 @@ public class Window {
     private FrameBuffer frameBuffer;
     private PickingTexture pickingTexture;
 
-    //for testing only
-    public float r, g, b, a;
-    private boolean fade = false;
 
 
     private static Window window = null;
@@ -39,24 +38,19 @@ public class Window {
     private Window(){
         this.width = 1920;
         this.height = 1080;
-        this.title = "Main";
-        r = 1;
-        g = 1;
-        b = 1;
-        a = 1;
+        this.title = "Nova";
+
+        EventSystem.addObserver(this);
     }
 
-    public static void changeScene(int newScene){
-        switch (newScene){
-            case 0:
-                currentScene = new LevelEditorScene();
-                break;
-            case 1:
-                currentScene = new LevelScene();
-                break;
-            default:
-                assert false: "Unknown Scene";
+    public static void changeScene(SceneInitializer sceneInitializer){
+
+        if (currentScene != null){
+            //destroy it
         }
+
+        currentScene = new Scene(sceneInitializer);
+
         currentScene.load();
         currentScene.init();
         currentScene.start();
@@ -146,7 +140,7 @@ public class Window {
         glViewport(0, 0,2560, 1440);
 
 
-        Window.changeScene(0);
+        Window.changeScene(new LevelEditorSceneInitializer());
     }
 
     public void loop(){
@@ -180,7 +174,7 @@ public class Window {
             DebugDraw.beginFrame();
 
             this.frameBuffer.bind();
-            glClearColor(r, g, b, a);
+            glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             //testing our dt as well as scene update
@@ -229,5 +223,15 @@ public class Window {
 
     public static ImGuiLayer getImGuiLayer() {
         return get().imGuiLayer;
+    }
+
+    @Override
+    public void onNotify(GameObject gameObject, Event event) {
+        if (event.type == EventType.GameEngineStartPlay){
+            System.out.println("Game engine started");
+        }
+        if (event.type == EventType.GameEngineStopPlay){
+            System.out.println("Game engine has been stopped");
+        }
     }
 }

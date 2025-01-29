@@ -9,6 +9,7 @@ import Nova.Transform;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import imgui.ImGui;
+import org.joml.Vector2f;
 import renderer.Renderer;
 
 import java.io.FileWriter;
@@ -19,24 +20,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Scene {
+public class Scene {
 
-    protected Camera camera;
-    protected List<GameObject> gameObjects = new ArrayList<>();
-    protected Renderer renderer = new Renderer();
-    protected boolean loadedLevel = false;
+    private Camera camera;
+    private List<GameObject> gameObjects = new ArrayList<>();
+    private Renderer renderer = new Renderer();
+    private boolean loadedLevel = false;
     private boolean isRunning = false;
 
-    public Scene(){
-//        this.renderer = new Renderer();
+    private SceneInitializer sceneInitializer;
+
+    public Scene(SceneInitializer sceneInitializer){
+        this.sceneInitializer = sceneInitializer;
     }
 
     public void init(){
-
+        this.camera = new Camera(new Vector2f());
+        this.sceneInitializer.loadResources(this);
+        this.sceneInitializer.init(this);
     }
 
     public void start(){
-        for(GameObject go : this.gameObjects){
+        for(int i = 0; i < gameObjects.size(); i++){
+            GameObject go = gameObjects.get(i);
             go.start();
             this.renderer.add(go);
         }
@@ -52,8 +58,26 @@ public abstract class Scene {
         }
     }
 
-    public abstract void update(float dt);
-    public abstract void render();
+    public void destroy(){
+        for (GameObject go : gameObjects){
+            go.destroy();
+        }
+    }
+
+    public List<GameObject> getGameObjects(){
+        return this.gameObjects;
+    }
+
+    public void update(float dt){
+        this.camera.adjustProjection();
+
+        for(GameObject go : this.gameObjects){
+            go.update(dt);
+        }
+    }
+    public void render(){
+        this.renderer.render();
+    }
 
     public Camera getCamera(){
         return this.camera;
@@ -61,7 +85,7 @@ public abstract class Scene {
 
 
     public void imgui(){
-
+        this.sceneInitializer.imgui();
     }
 
     public GameObject createGameObject(String name){

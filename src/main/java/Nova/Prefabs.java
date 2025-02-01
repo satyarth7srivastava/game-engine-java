@@ -4,6 +4,7 @@ package Nova;
 import Components.Sprite;
 import Components.SpriteRenderer;
 import org.joml.Vector2f;
+import util.Settings;
 
 public class Prefabs {
 

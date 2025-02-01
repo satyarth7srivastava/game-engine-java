@@ -23,17 +23,24 @@ public class MouseControls extends Component {
 
     @Override
     public void editorUpdate(float dt) {
-        if(holdingObj != null){
+        if (this.holdingObj != null)
+        {
             holdingObj.transform.position.x = MouseListner.getOrthoX();
             holdingObj.transform.position.y = MouseListner.getOrthoY();
+            if (holdingObj.transform.position.x >= 0.0f)
+                holdingObj.transform.position.x = (int)(holdingObj.transform.position.x/ Settings.GRID_WIDTH) * Settings.GRID_WIDTH;
+            else
+                holdingObj.transform.position.x = (int)(holdingObj.transform.position.x/ Settings.GRID_WIDTH) * Settings.GRID_WIDTH - Settings.GRID_WIDTH;
+            if (holdingObj.transform.position.y >= 0.0f)
+                holdingObj.transform.position.y = (int)(holdingObj.transform.position.y/ Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT;
+            else
+                holdingObj.transform.position.y = (int)(holdingObj.transform.position.y/ Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT - Settings.GRID_HEIGHT;
 
-            //snapping it according to the grid
-            holdingObj.transform.position.x = ((int) holdingObj.transform.position.x / Settings.GRID_WIDTH) * Settings.GRID_WIDTH;
-            holdingObj.transform.position.y = ((int) holdingObj.transform.position.y / Settings.GRID_HEIGHT) * Settings.GRID_HEIGHT;
 
-            if(MouseListner.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)){
+            holdingObj.transform.position.x += Settings.GRID_WIDTH * 0.5f;
+            holdingObj.transform.position.y += Settings.GRID_HEIGHT * 0.5f;
+            if (MouseListner.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
                 place();
-            }
         }
     }
 }

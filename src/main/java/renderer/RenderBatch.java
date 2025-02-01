@@ -46,12 +46,14 @@ public class RenderBatch implements Comparable<RenderBatch>{
     private int vaoID, vboID;
     private int maxBatchSize;
     private int zIndex;
+    private Renderer renderer;
 
-    public RenderBatch(int maxBatchSize, int zIndex){
+    public RenderBatch(int maxBatchSize, int zIndex, Renderer renderer){
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
         this.textures = new ArrayList<>();
         this.zIndex = zIndex;
+        this.renderer = renderer;
 
         this.vertices = new float[maxBatchSize * VERTEX_SIZE * 4]; // 4 vertex per quad
 
@@ -119,6 +121,13 @@ public class RenderBatch implements Comparable<RenderBatch>{
                 loadVertexProperties(i);
                 spr.setClean();
                 reBufferData = true;
+            }
+            if (spr.gameObject.transform.zIndex != this.zIndex){
+                destroyIfExist(spr.gameObject);
+
+                renderer.add(spr.gameObject);
+
+                i--;
             }
         }
 

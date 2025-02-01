@@ -28,6 +28,8 @@ public class Window implements Observer {
     private FrameBuffer frameBuffer;
     private PickingTexture pickingTexture;
 
+    private boolean runtimePlay = false;
+
 
 
     private static Window window = null;
@@ -46,9 +48,10 @@ public class Window implements Observer {
     public static void changeScene(SceneInitializer sceneInitializer){
 
         if (currentScene != null){
-            //destroy it
+            currentScene.destroy();
         }
 
+        getImGuiLayer().getPropertiesWindow().setActiveGameObject(null);
         currentScene = new Scene(sceneInitializer);
 
         currentScene.load();
@@ -181,7 +184,11 @@ public class Window implements Observer {
             if(dt >= 0) {
                 Renderer.bindShader(defaultShader);
                 DebugDraw.draw();
-                currentScene.update(dt);
+                if (!runtimePlay) {
+                    currentScene.editorUpdate(dt);
+                } else {
+                    currentScene.update(dt);
+                }
                 currentScene.render();
             }
             this.frameBuffer.unbind();
@@ -197,7 +204,6 @@ public class Window implements Observer {
             dt = endTime - beginTime;
             beginTime = endTime;
         }
-        currentScene.saveExit();
     }
 
     public static int getWidth(){
@@ -227,11 +233,24 @@ public class Window implements Observer {
 
     @Override
     public void onNotify(GameObject gameObject, Event event) {
-        if (event.type == EventType.GameEngineStartPlay){
-            System.out.println("Game engine started");
-        }
-        if (event.type == EventType.GameEngineStopPlay){
-            System.out.println("Game engine has been stopped");
+        switch (event.type){
+            case GameEngineStartPlay :
+                this.runtimePlay = true;
+                currentScene.save();
+                Window.changeScene(new LevelEditorSceneInitializer());
+                break;
+            case GameEngineStopPlay :
+                this.runtimePlay = false;
+                Window.changeScene(new LevelEditorSceneInitializer());
+                break;
+            case SaveLevel :
+                currentScene.save();
+                break;
+            case LoadLevel :
+                Window.changeScene(new LevelEditorSceneInitializer());
+                break;
+            default :
+                System.out.println("Nothing in switch");
         }
     }
 }

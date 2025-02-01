@@ -25,6 +25,10 @@ public class PropertiesWindow {
         return activeGameObject;
     }
 
+    public void setActiveGameObject(GameObject activeGameObject) {
+        this.activeGameObject = activeGameObject;
+    }
+
     public void update(float dt, Scene currentScene){
         debounce -= dt;
 

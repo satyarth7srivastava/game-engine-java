@@ -16,6 +16,8 @@ public class RigidBody2D extends Component {
     private boolean fixedRotation = false;
     private boolean continuousCollision = true;
 
+    private transient Body rawBody = null;
+
     @Override
     public void update(float dt){
         if (rawBody != null){
@@ -26,7 +28,6 @@ public class RigidBody2D extends Component {
         }
     }
 
-    private Body rawBody = null;
 
     public Vector2f getVelocity() {
         return velocity;

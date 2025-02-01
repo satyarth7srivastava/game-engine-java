@@ -3,6 +3,7 @@ package Components;
 import Nova.GameObject;
 import editor.NImGui;
 import imgui.ImGui;
+import imgui.type.ImInt;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -19,6 +20,10 @@ public abstract class Component {
     public transient GameObject gameObject = null;
 
     public void update(float dt){
+
+    }
+
+    public void editorUpdate(float dt){
 
     }
 
@@ -68,6 +73,14 @@ public abstract class Component {
                     if (ImGui.dragFloat3(name + ": ", imVec)){
                         val.set(imVec[0], imVec[1], imVec[2], imVec[3]);
                     }
+                } else if (type.isEnum()) {
+                    String[] enumVal = getEnumValues(type);
+                    String enumType = ((Enum) value).name();
+                    ImInt index = new ImInt(indexOf(enumType, enumVal));
+
+                    if (ImGui.combo(field.getName(), index, enumVal, enumVal.length)){
+                        field.set(this, type.getEnumConstants()[index.get()]);
+                    }
                 }
 
                 if(isPrivate){
@@ -83,6 +96,27 @@ public abstract class Component {
         if(this.uid == -1){
             this.uid = ID_counter++;
         }
+    }
+
+    private <T extends Enum<T>> String[] getEnumValues(Class<T> enumType){
+        String[] enumVal = new String[enumType.getEnumConstants().length];
+        int i = 0;
+        for (T enumIntegerValue : enumType.getEnumConstants()){
+            enumVal[i] = enumIntegerValue.name();
+            i++;
+        }
+        return enumVal;
+    }
+    private int indexOf(String str, String[] arr){
+        for (int i = 0; i < arr.length; i++) {
+            if (str.equals(arr[i])){
+                return i;
+            }
+        }
+        return -1;
+    }
+    public void destroy(){
+
     }
 
     public int getUid(){

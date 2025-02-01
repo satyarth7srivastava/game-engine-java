@@ -6,6 +6,7 @@ package Nova;
 */
 
 import editor.GameViewWindow;
+import editor.MenuBar;
 import editor.PropertiesWindow;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
@@ -24,6 +25,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class ImGuiLayer {
     //properties window
     private PropertiesWindow propertiesWindow;
+    private MenuBar menuBar;
 
     // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -40,6 +42,7 @@ public class ImGuiLayer {
         this.glfwWindow = glfwWindow;
         this.gameViewWindow = new GameViewWindow();
         this.propertiesWindow = new PropertiesWindow(pickingTexture);
+        this.menuBar = new MenuBar();
     }
 
     // Initialize Dear ImGui.
@@ -216,6 +219,7 @@ public class ImGuiLayer {
         gameViewWindow.imgui();
         propertiesWindow.update(dt, currentScene);
         propertiesWindow.imgui();
+        menuBar.imgui();
         //ending of windows must be before rendering
         ImGui.end();
         ImGui.render();

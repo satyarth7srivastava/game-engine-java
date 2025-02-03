@@ -2,13 +2,21 @@ package scenes;
 
 import Components.*;
 import Nova.*;
+import editor.NImGui;
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImBoolean;
+import observers.EventSystem;
+import observers.events.Event;
+import observers.events.EventType;
 import org.joml.Vector2f;
 import util.AssetPool;
+import util.FileDialogHandler;
 
 public class LevelEditorSceneInitializer extends SceneInitializer {
     private SpriteSheet sprites;
+    private float[] ssProperties = {1, 2, 3, 4};
 
     private GameObject levelEditorStuff;
 
@@ -64,7 +72,50 @@ public class LevelEditorSceneInitializer extends SceneInitializer {
         levelEditorStuff.imgui();
         ImGui.end();
 
-        ImGui.begin("Test Window");
+        ImGui.begin("spriteSheet");
+
+        //Adding Imgui stuffs for spriteSheet updation
+
+        ImGui.columns(2);
+
+        ImGui.setColumnWidth(0, 220.0f);
+
+        ImGui.text("Open New Spritesheet");
+        String resourceName = "";
+
+        ImGui.text("Sprite Width");
+        float[] valArr1 = {ssProperties[0]};
+        ImGui.dragFloat("##dragFloat1", valArr1, 0.1f);
+        ssProperties[0] = valArr1[0];
+
+        ImGui.text("Sprite Height");
+        float[] valArr2 = {ssProperties[1]};
+        ImGui.dragFloat("##dragFloat2", valArr2, 0.1f);
+        ssProperties[1] = valArr2[0];
+
+        ImGui.text("Number of Sprites");
+        float[] valArr3 = {ssProperties[2]};
+        ImGui.dragFloat("##dragFloat3", valArr3, 0.1f);
+        ssProperties[2] = valArr3[0];
+
+        ImGui.text("Spacing");
+        float[] valArr4 = {ssProperties[3]};
+        ImGui.dragFloat("##dragFloat4", valArr4, 0.1f);
+        ssProperties[3] = valArr4[0];
+
+        if (ImGui.button("Load PNG File")){
+            resourceName = FileDialogHandler.getFilePath();
+            if (!resourceName.equals("")) {
+                AssetPool.addSpriteSheet(resourceName,
+                        new SpriteSheet(AssetPool.getTexture(resourceName),
+                                (int) ssProperties[0], (int) ssProperties[1], (int) ssProperties[2], (int) ssProperties[3]));
+                this.sprites = AssetPool.getSpriteSheet(resourceName);
+            }
+        }
+
+        ImGui.nextColumn();
+
+        //Ending my code for ss
 
         ImVec2 windowPos = new ImVec2();
         ImGui.getWindowPos(windowPos);

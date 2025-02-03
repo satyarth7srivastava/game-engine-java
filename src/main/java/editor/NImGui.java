@@ -1,9 +1,13 @@
 package editor;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.flag.ImGuiStyleVar;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import physics2D.components.Box2DCollider;
+import physics2D.components.CircleCollider;
+import physics2D.components.RigidBody2D;
 
 public class NImGui {
 
@@ -118,5 +122,12 @@ public class NImGui {
         ImGui.popID();
 
         return res;
+    }
+
+    public static void drawPopup(boolean isOpen){
+        if(isOpen){
+            ImGui.begin("Properties");
+            ImGui.end();
+        }
     }
 }
